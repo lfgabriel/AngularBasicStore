@@ -22,6 +22,7 @@ export class CartService {
 
   clearCart() {
     this.items = [];
+    this.shipping = {} as Shipping;
     return this.items;
   }
 
