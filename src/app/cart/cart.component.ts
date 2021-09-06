@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { CartService } from '../cart.service';
 
+import { Shipping } from '../shipping';
+
 
 @Component({
   selector: 'app-cart',
@@ -11,25 +13,38 @@ import { CartService } from '../cart.service';
 export class CartComponent {
 
   items = this.cartService.getItems();
-  sum: number = 0;
+  itemsSum: number = 0;
+  shippingPrice: number = 0;
+  total: number = 0;
 
   checkoutForm = this.formBuilder.group({
     name: '',
     address: ''
   });
 
-  constructor(private cartService : CartService, private formBuilder: FormBuilder,) {
+  constructor(private cartService : CartService, private formBuilder: FormBuilder) {
     
    }
 
   ngOnInit(): void {
-    this.items.forEach(a => this.sum += a.price);
+    this.items.forEach(a => this.itemsSum += a.price);
+    const auxShippingValue = this.cartService.getShipping()?.price; 
+    if (auxShippingValue) {
+      this.shippingPrice = auxShippingValue;
+      this.total = this.itemsSum + this.shippingPrice;
+    }
+    else {
+      this.shippingPrice = 0;
+      this.total = this.itemsSum;
+    }
   }
 
   onSubmit(): void {
     // Process checkout data here
     this.items = this.cartService.clearCart();
-    this.sum = 0;
+    this.itemsSum = 0;
+    this.total = 0;
+    this.shippingPrice = 0;
     console.warn('Your order has been submitted', this.checkoutForm.value);
     this.checkoutForm.reset();
   }

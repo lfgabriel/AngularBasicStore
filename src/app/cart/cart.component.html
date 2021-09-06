@@ -9,10 +9,12 @@
   <a routerLink="/shipping">Shipping Prices</a>
 </p>
 
-<h3>Total: {{ sum }} </h3>
+<h3>Total items : {{ itemsSum }} </h3>
+<h3>Shipping    : {{ shippingPrice }} </h3>
+<h3>Total       : {{ total }} </h3>
 
 <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
-  
+
   <div>
     <label for="name">
       Name
